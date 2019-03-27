@@ -9,7 +9,6 @@ int main(){
     double totalAmountCollected, totalSalesTax, salesTax, totalCountyTax, totalStateTax, totalSales;
     string month, year;
     
-    cout << fixed << setprecision(2) << endl;
     cout << "Please enter a month, year and the total amount collected" << endl;
     getline(cin, month);
     getline(cin, year);
@@ -25,6 +24,7 @@ int main(){
     totalSalesTax = totalCountyTax + totalStateTax;
     
     // Output information to the stream.
+    cout << fixed << setprecision(2) << endl;
     cout  << "Total Collected:" << right << setw(12) << "$" << setw(12) << totalAmountCollected << endl;
     cout  <<"Sales:" << right << setw(22) << "$" << setw(12) << totalSales << endl;
     cout  << "County Sales Tax:" << right << setw(11) << "$"<< setw(12) <<totalCountyTax << endl;
