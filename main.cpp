@@ -14,7 +14,7 @@ int main(){
     getline(cin, month);
     getline(cin, year);
     cout << "Month: " << month << setw(12) << "Year: " << year << endl;
-    cout << "---------------"<< endl; // Ask professor about this line of code.
+    cout << setfill('-') << setw(20) << '\n' << setfill(' '); // Ask professor about this line of code.
     cin >> totalAmountCollected;
     
     // Calculations will take place here.
