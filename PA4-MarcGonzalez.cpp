@@ -22,7 +22,7 @@ int main(){
     }else if(playerOne < playerTwo){
         cout << "Player Two rolled a "<< playerTwo << ", player Two wins!" << endl;
     }else {
-        cout << "Player One rolled a: " << playerOne << " Player Two rolled a: " << playerTwo << endl;
+        cout << "It's a draw!" << endl;
     }
    
     return 0;
