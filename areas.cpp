@@ -2,11 +2,13 @@
 using namespace std;
 
 int main(){
+	// Create our needed variables for program to work.
 	const double PI=3.14159;
 	const int CIRCLE =1, RECTANGLE = 2, TRIANGLE = 3, QUIT = 4;
 	int choice;
 	double radius, base, length, height, width, area;
 	
+	// Introduce the menu to the user. 
 	cout << "Geometry Calculator" << endl
 		 << "\t1. Calculate the area of a circle" << endl
 		 << "\t2. Calculate the area of a rectangle" << endl
@@ -15,7 +17,8 @@ int main(){
 		 << "\tEnter your choice (1-4): ";
 		 
 		 cin>> choice; 
-	
+		
+		// User makes a choice, then continues to do the problem.
 		switch(choice){
 			case CIRCLE: cout << "Enter the radius of a circle: ";
 						 cin >> radius;
@@ -39,7 +42,6 @@ int main(){
 			case QUIT: cout << "Program is ending" << endl;
 					 	break;
 			default: cout << "Invalid input" << endl;
-			
 		}
 	return 0;
 }
