@@ -1,34 +1,66 @@
 #include <iostream>
-#include <iomanip>
-#include <string>
 using namespace std;
 
+int returnMinIndex(int[], int);
+int returnMaxIndex(int[], int);
+double getAverage(int[], int, int, int);
+
 int main(){
-    double const STATE_TAX = 0.04;
-    double const COUNTY_TAX = 0.02;
-    double totalAmountCollected, totalSalesTax, salesTax, totalCountyTax, totalStateTax, totalSales;
-    string month, year;
+    // Define array to store 10 integers
+    int SIZE = 10;
+    int test_grades[SIZE], minimumIndex, maximumIndex;
+    double averagedValue;
     
-    cout << "Please enter a month, year and the total amount collected" << endl;
-    getline(cin, month);
-    getline(cin, year);
-    cout << "Month: " << month << setw(12) << "Year: " << year << endl;
-    cout << setfill('-') << setw(20) << '\n' << setfill(' '); // Ask professor about this line of code.
-    cin >> totalAmountCollected;
+    for(int count = 0; count < SIZE; count++){
+        cout << "Enter the exam score " << (count + 1) << " \n";
+        cin >> test_grades[count];
+        if(test_grades[count] < 0 || test_grades[count] > 100){
+            cout << "Invalid test score\n Please enter a test score between 0 and 100" << endl;
+            cin >> test_grades[count];
+        }
+    }
     
-    // Calculations will take place here.
-    salesTax = 1 + (STATE_TAX + COUNTY_TAX);
-    totalSales = totalAmountCollected / salesTax;  // Total sales is calculated by total amount collected divided by 1+state and county tax.
-    totalStateTax = totalSales * STATE_TAX;
-    totalCountyTax = totalSales * COUNTY_TAX;
-    totalSalesTax = totalCountyTax + totalStateTax;
-    
-    // Output information to the stream.
-    cout << fixed << setprecision(2) << endl;
-    cout  << "Total Collected:" << right << setw(12) << "$" << setw(12) << totalAmountCollected << endl;
-    cout  <<"Sales:" << right << setw(22) << "$" << setw(12) << totalSales << endl;
-    cout  << "County Sales Tax:" << right << setw(11) << "$"<< setw(12) <<totalCountyTax << endl;
-    cout  << "State Sales Tax:" << right << setw(12) << "$"  << setw(12) << totalStateTax << endl;
-    cout  << "Total Sales Tax:" << right<< setw(12) << "$" << setw(12) << totalSalesTax << endl;
+    minimumIndex = returnMinIndex(test_grades, SIZE);
+    cout << "the smallest value was at index " << minimumIndex
+         << " the value was " << test_grades[minimumIndex] << endl;
+    maximumIndex = returnMaxIndex(test_grades, SIZE);
+    cout << "the largest value was at index " << maximumIndex
+         << " the value was " << test_grades[maximumIndex] << endl;
+    averagedValue = getAverage(test_grades, SIZE, maximumIndex, minimumIndex);
+    cout << "The average was: " << averagedValue << endl;
     return 0;
+ }
+
+int returnMinIndex(int arr[], int size){
+    int minIndex = 0;
+    for(int i = 0; i < size; i++){
+        if(arr[i] < arr[minIndex]){
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
+int returnMaxIndex(int arr[], int size){
+    int maxIndex = 0;
+    for(int i = 0; i < size; i++){
+        if(arr[i] > arr[maxIndex]){
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+
+// Get the average
+double getAverage(int arr[], int size, int maxIndex, int minIndex){
+    double average = 0;
+    double total = 0;
+    for(int i = 0; i < size; i++){
+        if(arr[i] == arr[minIndex]){
+            arr[i]--;
+        }else{
+            total += arr[i];
+        }
+        average = total / (size - 1);
+    }
+    return average;
 }
