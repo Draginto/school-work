@@ -3,41 +3,66 @@
 main:
 	jal intLoop  # Jumps to function intLoop, to get the users input.
 	
-	la $a0, sumResult # Show the text from sumResult.
+	la $a0, sumResult # Displays message: "The sum is: ."
 	li $v0, 4
 	syscall
 	
-	add $s0, $t0, $zero # store the sum in $s0
-	move $a0, $t0 # Moving the sum in $t0 to $a0, to display the integer total. 
+	add $s0, $t0, $zero # Store the sum in $s0.
 	
+	move $a0, $t0 # Moving the sum in $t0 to $a0, to display the integer total. 
 	li $v0, 1
 	syscall 
 	
-	add $s1, $t1, $zero # Store the count in $s1
+	add $s1, $t1, $zero # Store the number count in $s1.
 	move $a1, $t1 # We move our count variable to $a1 register to use in function.
 	
 	jal displayCount # Jumps to function displayCount, in order to display the count of numbers
 	
-	move $a2, $s0 # move the sum to $a2.
-	move $a3, $s1 # move the count to $a3.
+	addi $s2, $s0, 0 # add sum to $s0 for later use.
+	addi $s3, $s1, 0 # add n to $s0 for later use.
 	
-	jal averages # Displays the average of numbers entered.
-	move $s3, $v0 
-	add $a0, $zero, $v1 
+	move $a2, $s0 # move the sum to $a2 for use in averageTopHalf.
+	move $a3, $s1 # move the count to $a3 for use in averageTopHalf.
+	
+	jal averageTopHalf # Displays the average of numbers entered.
+	
+	add $a0, $zero, $v1 # Retrieves the return value of averageTopHalf.
 	li $v0, 1
 	syscall # Displays the quotient.
 	
-	la $a0, decimalPoint # Show the text from sumResult.
+	la $a0, decimalPoint 
 	li $v0, 4
-	syscall
+	syscall # Display the decimal point.
 	
-	add $a0, $zero, $s3
-	li $v0, 1
-	syscall # Outputs the remainder.
+	# -- Start dividing up to 3 decimal points. -- 
 	
+	addi $t2, $zero, 10 # Get the multiplier(10).
+	addi $t3, $t3, 3 # End at 3.
+	addi $t7, $t7, 0 # start at 0.
 	
+	loopingDiv:
+		div $s2, $s3 # sum/n = ...
+		mfhi $t4 # The remainder in $t4.
+		
+		beq $t7, $t3, end
+		
+		mult $t4, $t2 # multiply the current remainder by 10.
+    		mflo $s0
+        
+    		div $s0, $s3 # divide the new remainder 
+    		mflo $t5 # Stores new quotient in $t5. 
+    		mfhi $s2 # Stores new remainder ( Will replace the sum in top of loop ). 
+		
+		move $a0, $t5 #move quotient to $a0 register.
+		li $v0, 1
+		syscall # Prints 1st decimal.
+		
+		addi $t7, $t7, 1 # count+=1 
+		j loopingDiv	
+	
+end:
 	li $v0, 10
-	syscall # End the program.
+    	syscall  # Terminate program.
 		
 intLoop:
 	la $a0, Prompt
@@ -56,7 +81,7 @@ intLoop:
 	j intLoop
 	
 getOutofLoop:	
-	jr $ra # jumps back to place where it was called.
+	jr $ra # Jumps back to place where it was called.
 
 displayCount:
 	la $a0, newline  
@@ -72,51 +97,24 @@ displayCount:
 	syscall # Display message : " numbers were entered."
 	
 	jr $ra # Jump back to previous call.
-averages:
+
+averageTopHalf:
 	la $a0, newline
 	li $v0, 4
-	syscall # Gives a newline.
+	syscall # Outputs a newline to clean up the display.
 	
 	la $a0, avgResult
 	li $v0, 4
-	syscall # Gives a newline.
+	syscall # Display message : "The average is: "
 	
 	div $a2, $a3 # sum/n = ...
 
-	# Division loop.
-	# Get the first divison result.
-
-	mflo $s1 # The quotient.
-	mfhi $s0 # The remainder.
-	 
-	addi $t3, $t3, 3 # go up to 3 decimals.
-	addi $t4, $t4, 0 # counter
-	add $s3, $s3, 0
-	addi $t2, $zero, 10 # Get the multiplier.
-divisionLoop:
+	mflo $s1 # Moves the quotient to $s1.
 	
-	beq $t3, $t4, else # if a=
-	if:
-		mult $s0, $t2 # multiply the current remainder by 10.
-		mflo $s0
-		
-		div $s0, $a3 # divide the new remainder 
-		mflo $t1 # Stores new quotient. 
-		mfhi $t0 # Stores new remainder. 
-		
-		add $s3, $t1, $t2
-		addi $t4, $t4, 1
-		
-		j divisionLoop
-	else:	
-	
-	# Will add the ending result
 	add $v1, $zero, $s1 # Return the quotient.
-	add $v0, $zero, $s3 # Return the remainder.
 	
 	jr $ra # Jump back to previous statement.
 	
-
 .data
 Prompt: .asciiz "Enter a number(0 to exit): "
 sumResult: .asciiz "The sum is: "
